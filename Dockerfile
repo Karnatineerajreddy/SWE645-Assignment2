@@ -1,7 +1,11 @@
-FROM node:18
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 8080
-CMD ["node", "index.js"]
+# Use official Nginx image
+FROM nginx:alpine
+
+# Copy all HTML/CSS/JS/images into Nginx web root
+COPY . /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Default command to run Nginx
+CMD ["nginx", "-g", "daemon off;"]
