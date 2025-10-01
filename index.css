@@ -1,0 +1,20 @@
+/*  
+  Author: Neeraj Reddy Karnati
+  G#:01502689
+  File: index.css
+  Purpose: Provides styling for the cricket-themed homepage in SWE645 Assignment 1, 
+           including hero banner, layout, card design, and footer formatting. 
+*/
+body { font-family: Arial, sans-serif; }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                  url('https://upload.wikimedia.org/wikipedia/commons/7/72/Cricket_bowling.JPG') 
+                  center/cover no-repeat;
+      color: white;
+      padding: 80px 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .content { max-width: 1000px; margin: 24px auto; }
+    .card { padding: 20px; border-radius: 8px; }
+    footer { text-align: center; margin-top: 36px; color: #555; }   

@@ -1,0 +1,131 @@
+<!--  
+  Author: Neeraj Reddy Karnati  
+  G#:01502689
+  File: survey.html  
+  Purpose: Student Survey form for SWE645 Assignment 1. Collects student details, feedback, raffle entries, 
+           and displays results with basic validation and success/error messages.  
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Student Survey — SWE645</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f8fb; }
+    .container { max-width: 700px; margin: 30px auto; }
+    .form-card { padding: 24px; border-radius: 10px; }
+    .note { font-size: 0.9em; color: #555; }
+    .result-box {
+      display:none; 
+      margin-top:15px; 
+      padding:12px; 
+      border-radius:6px;
+    }
+    .success { background:#d4edda; color:#155724; }
+    .error { background:#f8d7da; color:#721c24; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="w3-card form-card w3-white">
+    <div class="w3-container w3-green w3-round-top">
+      <h2>Student Survey</h2>
+    </div>
+
+    <form id="surveyForm" class="w3-container" onsubmit="return handleSubmit(event)">
+
+      <label>First Name *</label>
+      <input class="w3-input w3-margin-bottom" type="text" required>
+
+      <label>Last Name *</label>
+      <input class="w3-input w3-margin-bottom" type="text" required>
+
+      <label>Street Address *</label>
+      <input class="w3-input w3-margin-bottom" type="text" required>
+
+      <label>City *</label>
+      <input class="w3-input w3-margin-bottom" type="text" required>
+
+      <label>State *</label>
+      <input class="w3-input w3-margin-bottom" type="text" required>
+
+      <label>ZIP *</label>
+      <input class="w3-input w3-margin-bottom" type="text" pattern="\d{5}" title="5-digit ZIP" required>
+
+      <label>Telephone Number *</label>
+      <input class="w3-input w3-margin-bottom" type="tel" pattern="\d{10}" title="10-digit phone number" required>
+
+      <label>Email *</label>
+      <input class="w3-input w3-margin-bottom" type="email" required>
+
+      <label>Date of Survey *</label>
+      <input class="w3-input w3-margin-bottom" type="date" required>
+
+      <p><b>What did you like most about the campus?</b></p>
+      <p><input class="w3-check" type="checkbox"> Students</p>
+      <p><input class="w3-check" type="checkbox"> Location</p>
+      <p><input class="w3-check" type="checkbox"> Campus</p>
+      <p><input class="w3-check" type="checkbox"> Atmosphere</p>
+      <p><input class="w3-check" type="checkbox"> Dorm rooms</p>
+      <p><input class="w3-check" type="checkbox"> Sports</p>
+
+      <p><b>How did you become interested in the university?</b></p>
+      <p><input class="w3-radio" type="radio" name="interest" required> Friends</p>
+      <p><input class="w3-radio" type="radio" name="interest"> Television</p>
+      <p><input class="w3-radio" type="radio" name="interest"> Internet</p>
+      <p><input class="w3-radio" type="radio" name="interest"> Other</p>
+
+      <label>How likely are you to recommend this school?</label>
+      <select class="w3-select w3-margin-bottom" required>
+        <option value="Very Likely">Very Likely</option>
+        <option value="Likely" selected>Likely</option>
+        <option value="Unlikely">Unlikely</option>
+      </select>
+
+      <label>Raffle (at least 10 comma-separated numbers, 1–100) *</label>
+      <input class="w3-input w3-margin-bottom" id="raffle" required>
+      <div class="note">Used to check if you win a free movie ticket.</div>
+
+      <label>Additional Comments</label>
+      <textarea class="w3-input w3-margin-bottom" rows="3"></textarea>
+
+      <button class="w3-button w3-green" type="submit">Submit</button>
+      <button class="w3-button w3-red" type="reset">Cancel</button>
+    </form>
+
+    <div id="result" class="result-box"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:15px;">
+    <a href="index.html" class="w3-button w3-light-grey w3-round">⬅ Back to Home</a>
+  </div>
+</div>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const raffle = document.getElementById('raffle').value.split(',').map(x=>+x.trim());
+  if (raffle.length < 10 || raffle.some(n=>isNaN(n)||n<1||n>100)) {
+    showResult("❌ Please enter at least 10 valid numbers between 1 and 100.", false);
+    return false;
+  }
+  const winning = Math.floor(Math.random()*100)+1;
+  const win = raffle.includes(winning);
+  showResult(win 
+    ? `🎉 Winning number: ${winning}. You win a free movie ticket!` 
+    : `Winning number was ${winning}. Better luck next time!`, win);
+  e.target.reset();
+}
+function showResult(msg, success) {
+  const box = document.getElementById('result');
+  box.style.display = "block";
+  box.className = "result-box " + (success ? "success" : "error");
+  box.innerText = msg;
+}
+</script>
+
+</body>
+</html>

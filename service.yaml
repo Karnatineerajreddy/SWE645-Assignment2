@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-survey-service
+spec:
+  selector:
+    app: student-survey
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    nodeport : 30080
+  type: ClusterIP
