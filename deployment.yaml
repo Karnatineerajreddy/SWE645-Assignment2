@@ -5,7 +5,7 @@ metadata:
   labels:
     app: student-survey
 spec:
-  replicas: 3   # requirement for resiliency/scalability
+  replicas: 3
   selector:
     matchLabels:
       app: student-survey
@@ -15,7 +15,8 @@ spec:
         app: student-survey
     spec:
       containers:
-      - name: student-survey
-        image: neerajreddy22/swe645-assignment2-neerajreddykarnati:latest
-        ports:
-        - containerPort: 80
+        - name: student-survey
+          image: neerajreddy22/swe645-assignment2-neerajreddykarnati:latest
+          ports:
+            - containerPort: 80
+              name: http
