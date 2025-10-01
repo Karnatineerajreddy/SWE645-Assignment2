@@ -17,6 +17,7 @@ spec:
       containers:
         - name: student-survey
           image: neerajreddy22/swe645-assignment2-neerajreddykarnati:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
