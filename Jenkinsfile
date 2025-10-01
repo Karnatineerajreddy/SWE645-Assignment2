@@ -2,22 +2,28 @@
 pipeline {
   agent any
   environment {
+    // DockerHub repo - image will be tagged with BUILD_NUMBER
     IMAGE = "neerajreddy22/swe645-assignment2-neerajreddykarnati:${env.BUILD_NUMBER}"
-    REGISTRY_CREDENTIALS = "dockerhub-creds"
-    KUBE_CONFIG = "kubconfig"
+
+    // Jenkins credential IDs
+    REGISTRY_CREDENTIALS = "dockerhub-creds"   // DockerHub username+password
+    KUBE_CONFIG = "kubconfig"                  // kubeconfig file from Rancher
   }
+
   stages {
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
-    stage('Build') {
+
+    stage('Build Docker Image') {
       steps {
         sh 'docker build -t $IMAGE .'
       }
     }
-    stage('Push') {
+
+    stage('Push to DockerHub') {
       steps {
         withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'REG_USER', passwordVariable: 'REG_PASS')]) {
           sh '''
@@ -27,22 +33,26 @@ pipeline {
         }
       }
     }
+
     stage('Deploy to Kubernetes') {
       steps {
         withCredentials([file(credentialsId: env.KUBE_CONFIG, variable: 'KUBECONFIG_FILE')]) {
           sh '''
             export KUBECONFIG=$KUBECONFIG_FILE
-            # Update deployment.yaml with the new image version
-            sed -i "s|neerajreddy22/swe645-assignment2-neerajreddykarnati:latest|$IMAGE|g" k8s/deployment.yaml || true
-            kubectl apply -f k8s/
+            # update deployment.yaml image reference
+            sed -i "s|image:.*|image: $IMAGE|g" deployment.yaml
+            kubectl apply -f deployment.yaml
+            kubectl apply -f service.yaml
+            kubectl rollout status deployment/student-survey-deployment
           '''
         }
       }
     }
   }
+
   post {
     always {
-      echo 'Pipeline finished'
+      echo 'Pipeline finished ✅'
     }
   }
 }
