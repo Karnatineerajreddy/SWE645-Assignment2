@@ -1,33 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swe645-sample-deployment
+  name: student-survey-deployment
   labels:
-    app: swe645-sample
+    app: student-survey
 spec:
-  replicas: 3
+  replicas: 3   # requirement for resiliency/scalability
   selector:
     matchLabels:
-      app: swe645-sample
+      app: student-survey
   template:
     metadata:
       labels:
-        app: swe645-sample
+        app: student-survey
     spec:
       containers:
-        - name: swe645-sample
-          image: YOUR_REGISTRY/swe645-sample:latest
-          ports:
-            - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 5
+      - name: student-survey
+        image: neerajreddy22/swe645-assignment2-neerajreddykarnati:latest
+        ports:
+        - containerPort: 80
