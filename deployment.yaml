@@ -1,20 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: student-survey-deployment
+  name: swe645-sample-deployment
+  labels:
+    app: swe645-sample
 spec:
-  replicas: 1   # hostPort → only one pod per node
+  replicas: 3
   selector:
     matchLabels:
-      app: student-survey
+      app: swe645-sample
   template:
     metadata:
       labels:
-        app: student-survey
+        app: swe645-sample
     spec:
       containers:
-      - name: student-survey
-        image: neerajreddy22/swe645-assignment2-neerajreddykarnati:v1
-        ports:
-        - containerPort: 80
-          hostPort: 30080
+        - name: swe645-sample
+          image: YOUR_REGISTRY/swe645-sample:latest
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
