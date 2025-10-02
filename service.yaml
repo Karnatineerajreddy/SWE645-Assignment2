@@ -7,6 +7,6 @@ spec:
     app: student-survey
   ports:
     - protocol: TCP
-      port: 80        # Exposed on external LB
-      targetPort: 80  # Container port
-  type: LoadBalance
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
